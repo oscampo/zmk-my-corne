@@ -331,7 +331,8 @@ static void handle_layout_v2(const uint8_t *p, uint16_t len)
         uint8_t w      = p[2 + i * 3];
         uint8_t h      = p[3 + i * 3];
         uint8_t repeat = p[4 + i * 3];
-        if (w == 0 || w > SRC_W || h == 0 || repeat < 1 || repeat > MAX_LAYOUT_ROWS) {
+        if (w == 0 || w > SRC_W || h == 0 || h > SRC_H ||
+            repeat < 1 || repeat > MAX_LAYOUT_ROWS) {
             LOG_WRN("cell_grid: malformed LAYOUT_v2 entry %u (w=%u h=%u repeat=%u)",
                     i, w, h, repeat);
             return;
