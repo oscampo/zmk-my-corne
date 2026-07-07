@@ -13,7 +13,7 @@
  *   Every 20th drawn frame logs received/drawn/backlog counters at INFO
  *   for diagnosing display lag vs. BLE delivery.
  *
- * Characteristic 0x1526 — Read + Notify, 3 bytes
+ * Characteristic 0x1526 — Read + Notify, 4 bytes
  *   Byte 0:
  *     bit 0     : USB HID active (1 = host USB HID connected)
  *     bits [3:1]: active BLE profile index 0–4 (display as 1–5)
@@ -26,7 +26,12 @@
  *     active layer index (zmk_keymap_highest_layer_active()), 0-based, the
  *     highest-numbered currently-active layer per ZMK's own definition of
  *     "the active layer" for stacked/momentary layers.
- *   Notifies on BLE connect, profile change, USB/endpoint change, layer change.
+ *   Byte 3:
+ *     zmk_wpm_get_state(), clamped to 0-255. Raw pass-through, no smoothing
+ *     or "hold last nonzero" logic - ZMK's own ~5s windowed average already
+ *     decays to 0 when idle, a real "not typing" signal we deliberately
+ *     don't suppress (see build_status_bytes()).
+ *   Notifies on BLE connect, profile/layer/WPM change, USB/endpoint change.
  *   Battery level: use standard BAS 0x180F / 0x2A19 (ZMK provides it).
  *
  * Characteristic 0x1527 — Write (WriteWithResponse), cell-grid protocol v1.1
@@ -52,6 +57,7 @@
  */
 
 #include <zephyr/kernel.h>
+#include <zephyr/sys/util.h>
 #include <zephyr/bluetooth/bluetooth.h>
 #include <zephyr/bluetooth/conn.h>
 #include <zephyr/bluetooth/gatt.h>
@@ -65,10 +71,12 @@
 #include <zmk/usb.h>
 #include <zmk/endpoints.h>
 #include <zmk/keymap.h>
+#include <zmk/wpm.h>
 #include <zmk/events/ble_active_profile_changed.h>
 #include <zmk/events/usb_conn_state_changed.h>
 #include <zmk/events/endpoint_changed.h>
 #include <zmk/events/layer_state_changed.h>
+#include <zmk/events/wpm_state_changed.h>
 
 #ifndef ZMK_BLE_PROFILE_COUNT
 #define ZMK_BLE_PROFILE_COUNT 5
@@ -159,7 +167,7 @@ static K_WORK_DEFINE(flush_work, flush_canvas);
 
 /* ── Status bytes ────────────────────────────────────────────────────────── */
 
-static void build_status_bytes(uint8_t out[3])
+static void build_status_bytes(uint8_t out[4])
 {
     uint8_t flags = 0;
 #if IS_ENABLED(CONFIG_ZMK_USB)
@@ -183,6 +191,16 @@ static void build_status_bytes(uint8_t out[3])
      * for stacked/momentary layers. Truncated to uint8_t; ZMK caps layer
      * count well under 256 so this never wraps in practice. */
     out[2] = (uint8_t)zmk_keymap_highest_layer_active();
+    /* Raw zmk_wpm_get_state(), no smoothing/hold-last-value logic here on
+     * purpose: ZMK's own windowed average already decays to 0 within its
+     * ~5s window when idle, which is a real, free "not typing" signal.
+     * Suppressing that zero app-side (to keep the last nonzero reading on
+     * screen) would silently reintroduce the same stale-value-shown-as-live
+     * problem the custom-token staleness balloons exist to warn about, for
+     * no benefit weighed against the added state. Clamped since ZMK's
+     * int state is unbounded in principle; the field is only a byte. */
+    int wpm = zmk_wpm_get_state();
+    out[3] = (uint8_t)CLAMP(wpm, 0, 255);
 }
 
 /* ── Cell-grid protocol (0x1527) ─────────────────────────────────────────── */
@@ -504,7 +522,7 @@ static ssize_t on_status_read(struct bt_conn *conn,
                               const struct bt_gatt_attr *attr,
                               void *buf, uint16_t len, uint16_t offset)
 {
-    uint8_t status[3];
+    uint8_t status[4];
     build_status_bytes(status);
     return bt_gatt_attr_read(conn, attr, buf, len, offset,
                              status, sizeof(status));
@@ -514,7 +532,7 @@ static void on_status_ccc_changed(const struct bt_gatt_attr *attr, uint16_t valu
 {
     if (value == BT_GATT_CCC_NOTIFY) {
         /* Client just subscribed — send current state immediately */
-        uint8_t status[3];
+        uint8_t status[4];
         build_status_bytes(status);
         bt_gatt_notify(NULL, attr - 1, status, sizeof(status));
     }
@@ -557,7 +575,7 @@ BT_GATT_SERVICE_DEFINE(keyboard_display_svc,
 
 static int status_event_listener(const zmk_event_t *eh)
 {
-    uint8_t status[3];
+    uint8_t status[4];
     build_status_bytes(status);
     bt_gatt_notify(NULL, &keyboard_display_svc.attrs[4], status, sizeof(status));
     return ZMK_EV_EVENT_BUBBLE;
@@ -568,6 +586,7 @@ ZMK_SUBSCRIPTION(kbd_status, zmk_ble_active_profile_changed);
 ZMK_SUBSCRIPTION(kbd_status, zmk_usb_conn_state_changed);
 ZMK_SUBSCRIPTION(kbd_status, zmk_endpoint_changed);
 ZMK_SUBSCRIPTION(kbd_status, zmk_layer_state_changed);
+ZMK_SUBSCRIPTION(kbd_status, zmk_wpm_state_changed);
 
 /* ── BLE link diagnostics + latency fix ──────────────────────────────────────
  *
