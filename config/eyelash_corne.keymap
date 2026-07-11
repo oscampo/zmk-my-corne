@@ -222,10 +222,10 @@
         layer_5 {
             display-name = "BOX DRAW";
             bindings = <
-&trans  &uc 0x250C 0  &uc 0x252C 0  &uc 0x2510 0  &uc 0x2500 0  &trans                    &trans          &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &uc 0x251C 0  &uc 0x253C 0  &uc 0x2524 0  &uc 0x2502 0  &trans            &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &uc 0x2514 0  &uc 0x2534 0  &uc 0x2518 0  &trans        &trans  &trans            &trans          &trans  &trans  &trans  &trans  &trans  &trans
-                                    &trans        &trans        &trans                                    &trans  &trans  &trans
+&trans  &uc 0x250C 0  &uc 0x252C 0  &uc 0x2510 0  &uc 0x2500 0  &trans                    &trans          &kp F19  &kp F20  &kp F21  &trans  &trans  &trans
+&trans  &uc 0x251C 0  &uc 0x253C 0  &uc 0x2524 0  &uc 0x2502 0  &trans            &trans  &trans  &trans  &kp F16  &kp F17  &kp F18  &trans  &trans  &trans
+&trans  &uc 0x2514 0  &uc 0x2534 0  &uc 0x2518 0  &trans        &trans  &trans            &trans          &kp F13  &kp F14  &kp F15  &trans  &trans  &trans
+                                    &trans        &trans        &trans                                    &trans   &trans   &trans
             >;
         };
     };
