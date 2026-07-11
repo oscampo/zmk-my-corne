@@ -253,10 +253,10 @@ layers:
   - '&uc 0x2500 0'
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
-  - F19
-  - F20
-  - F21
   - {t: '$$mdi:transfer$$', type: trans}
+  - {t: Hyper+1, s: Hyper+!}
+  - {t: Hyper+2, s: Hyper+@}
+  - {t: Hyper+3, s: Hyper+#}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
@@ -268,10 +268,10 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
-  - F16
-  - F17
-  - F18
   - {t: '$$mdi:transfer$$', type: trans}
+  - {t: Hyper+4, s: Hyper+$}
+  - {t: Hyper+5, s: Hyper+%}
+  - {t: Hyper+6, s: Hyper+^}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
@@ -282,10 +282,10 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
-  - F13
-  - F14
-  - F15
   - {t: '$$mdi:transfer$$', type: trans}
+  - {t: Hyper+7, s: Hyper+&}
+  - {t: Hyper+8, s: Hyper+*}
+  - {t: Hyper+9, s: Hyper+(}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
