@@ -1,7 +1,7 @@
 layout: {zmk_keyboard: eyelash_corne}
 layers:
   QWERTY:
-  - F14
+  - $$mdi:keyboard-esc$$
   - Q
   - W
   - E
