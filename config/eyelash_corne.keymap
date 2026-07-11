@@ -171,7 +171,7 @@
         default_layer {
             display-name = "QWERTY";
             bindings = <
-&kp ESCAPE                   &kp Q               &kp W           &kp E               &kp R                   &kp T                            &none         &kp Y        &kp U                    &kp I                &kp O            &kp P                           &kp BSPC
+&kp F14                      &kp Q               &kp W           &kp E               &kp R                   &kp T                            &none         &kp Y        &kp U                    &kp I                &kp O            &kp P                           &kp BSPC
 &kp TAB                      &mt LEFT_COMMAND A  &mt LEFT_ALT S  &mt LEFT_CONTROL D  &mt_shift LEFT_SHIFT F  &kp G                     &none  &none  &none  &kp H        &mt_shift RIGHT_SHIFT J  &mt RIGHT_CONTROL K  &mt RIGHT_ALT L  &mt RIGHT_COMMAND SINGLE_QUOTE  &kp LS(SINGLE_QUOTE)
 &mt LA(LC(DELETE)) CAPSLOCK  &kp Z               &kp X           &kp C               &kp V                   &kp B        &kp SPACE           &none         &kp N        &kp M                    &mt SEMICOLON COMMA  &td_mt           &kp FSLH                        &mt LEFT_ALT ENTER
                                                                  &kp LEFT_CONTROL    &lt 3 LEFT_ALT          &lt 2 ENTER                                    &lt 1 SPACE  &lt 5 DEL                &kp RALT
