@@ -647,7 +647,29 @@ ZMK_SUBSCRIPTION(kbd_status, zmk_wpm_state_changed);
  * A first attempt also requested 2M PHY on connect; that failed on this
  * hardware (HCI status 0x1a, unsupported remote feature - logged as
  * `Failed LE Set PHY (-5)`) and has been removed. PHY is still logged
- * read-only for visibility. */
+ * read-only for visibility.
+ *
+ * Follow-up (reconnect after the host's Bluetooth stack was ever
+ * suspended/torn down and came back, sleep/resume or "keyboard walked
+ * out of range and back"): the single on_connected() request above is
+ * fire-and-forget. If the host doesn't apply it, e.g. still settling
+ * right after a resume, we silently stay at whatever latency the host
+ * defaults to, and nothing has ever retried. Reported symptom was
+ * erratic page render/blank timing after reconnect that a full
+ * keyboard power-cycle fixed but restarting the companion app alone
+ * did not, consistent with the request having been dropped rather
+ * than something on the app side. low_latency_retry_work below
+ * re-requests it a bounded number of times until on_le_param_updated()
+ * confirms latency=0, then stops; it's cancelled on disconnect so it
+ * never fires against a stale bt_conn. */
+
+#define LOW_LATENCY_RETRY_DELAY_MS 750
+#define LOW_LATENCY_MAX_RETRIES 5
+
+static struct bt_conn *low_latency_conn;
+static uint8_t low_latency_retry_count;
+static void low_latency_retry_cb(struct k_work *work);
+static K_WORK_DELAYABLE_DEFINE(low_latency_retry_work, low_latency_retry_cb);
 
 static void log_conn_params(struct bt_conn *conn, const char *why)
 {
@@ -667,37 +689,82 @@ static void log_conn_params(struct bt_conn *conn, const char *why)
              info.le.latency, info.le.timeout * 10, tx_phy, rx_phy);
 }
 
+/* Measured on this hardware: interval=15ms (fine) but latency=30,
+ * i.e. the peripheral may sleep through up to 30 consecutive
+ * connection events before it's required to listen again. A
+ * WriteWithoutResponse burst that lands while we're deep in that
+ * skip cycle can sit unseen for up to (latency+1)*interval =~465ms
+ * before our radio next listens - and if that resync cost is paid
+ * per chunk rather than once per frame, it plausibly adds up to the
+ * multi-second display lag reported against the companion app.
+ * Requesting latency=0 trades idle battery life (radio must respond
+ * every interval instead of sleeping) for eliminating that stall
+ * entirely. Interval range kept close to the observed 15ms so this
+ * is purely a latency change, not an interval renegotiation. */
+static const struct bt_le_conn_param low_latency_param =
+    BT_LE_CONN_PARAM_INIT(6, 12, 0, 400);
+
+static void low_latency_retry_cb(struct k_work *work)
+{
+    ARG_UNUSED(work);
+    if (!low_latency_conn) return;
+
+    struct bt_conn_info info;
+    if (bt_conn_get_info(low_latency_conn, &info) != 0 || info.le.latency == 0) {
+        return;
+    }
+
+    if (low_latency_retry_count >= LOW_LATENCY_MAX_RETRIES) {
+        log_conn_params(low_latency_conn, "giving up on latency=0,");
+        return;
+    }
+
+    low_latency_retry_count++;
+    LOG_INF("kbd_display: retrying param update (attempt %u/%u)",
+            low_latency_retry_count, LOW_LATENCY_MAX_RETRIES);
+    log_conn_params(low_latency_conn, "retry,");
+    bt_conn_le_param_update(low_latency_conn, &low_latency_param);
+    k_work_reschedule(&low_latency_retry_work, K_MSEC(LOW_LATENCY_RETRY_DELAY_MS));
+}
+
 static void on_connected(struct bt_conn *conn, uint8_t err)
 {
     if (err) return;
     log_conn_params(conn, "connected,");
 
-    /* Measured on this hardware: interval=15ms (fine) but latency=30,
-     * i.e. the peripheral may sleep through up to 30 consecutive
-     * connection events before it's required to listen again. A
-     * WriteWithoutResponse burst that lands while we're deep in that
-     * skip cycle can sit unseen for up to (latency+1)*interval =~465ms
-     * before our radio next listens - and if that resync cost is paid
-     * per chunk rather than once per frame, it plausibly adds up to the
-     * multi-second display lag reported against the companion app.
-     * Requesting latency=0 trades idle battery life (radio must respond
-     * every interval instead of sleeping) for eliminating that stall
-     * entirely. Interval range kept close to the observed 15ms so this
-     * is purely a latency change, not an interval renegotiation. */
-    static const struct bt_le_conn_param low_latency_param =
-        BT_LE_CONN_PARAM_INIT(6, 12, 0, 400);
+    if (low_latency_conn) {
+        bt_conn_unref(low_latency_conn);
+    }
+    low_latency_conn = bt_conn_ref(conn);
+    low_latency_retry_count = 0;
+
     bt_conn_le_param_update(conn, &low_latency_param);
+    k_work_reschedule(&low_latency_retry_work, K_MSEC(LOW_LATENCY_RETRY_DELAY_MS));
+}
+
+static void on_disconnected(struct bt_conn *conn, uint8_t reason)
+{
+    ARG_UNUSED(reason);
+    k_work_cancel_delayable(&low_latency_retry_work);
+    if (low_latency_conn == conn) {
+        bt_conn_unref(low_latency_conn);
+        low_latency_conn = NULL;
+    }
 }
 
 static void on_le_param_updated(struct bt_conn *conn, uint16_t interval,
                                 uint16_t latency, uint16_t timeout)
 {
-    ARG_UNUSED(latency); ARG_UNUSED(timeout);
+    ARG_UNUSED(interval); ARG_UNUSED(timeout);
     log_conn_params(conn, "params updated,");
+    if (latency == 0 && conn == low_latency_conn) {
+        k_work_cancel_delayable(&low_latency_retry_work);
+    }
 }
 
 BT_CONN_CB_DEFINE(kbd_display_conn_cb) = {
     .connected        = on_connected,
+    .disconnected     = on_disconnected,
     .le_param_updated = on_le_param_updated,
 };
 
