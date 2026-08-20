@@ -90,6 +90,15 @@
             #binding-cells = <2>;
             tapping-term-ms = <150>;
         };
+
+        bhv_html_comment: bhv_html_comment {
+            compatible = "zmk,behavior-hold-tap";
+            label = "BHV_HTML_COMMENT";
+            bindings = <&html_comment>, <&kp>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <150>;
+        };
     };
 
     rgb_encoder: rgb_encoder {
@@ -144,6 +153,16 @@
 
             label = "CODE_BLOCK";
         };
+
+        html_comment: html_comment {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&macro_tap_time 1>,
+                <&kp LESS_THAN &kp EXCLAMATION &kp MINUS &kp MINUS &kp MINUS &kp MINUS &kp MINUS &kp MINUS &kp GT &kp LEFT_ARROW &kp LEFT_ARROW &kp LEFT_ARROW &kp LEFT_ARROW>;
+
+            label = "HTML_COMMENT";
+        };
     };
 
     combos {
@@ -183,10 +202,10 @@
         lower_layer {
             display-name = "NUMBER";
             bindings = <
-&bhv_code_block 0 GRAVE  &kp LS(NUMBER_1)      &kp LS(NUMBER_2)  &kp LS(NUMBER_3)  &kp LS(NUMBER_4)  &kp LS(NUMBER_5)                   &none         &kp LS(NUMBER_6)       &kp LS(NUMBER_7)     &kp LS(NUMBER_8)  &kp LS(NUMBER_9)  &kp LS(NUMBER_0)  &kp BSPC
-&kp LS(GRAVE)            &kp KP_N1             &kp KP_N2         &kp KP_N3         &kp KP_N4         &kp KP_N5                   &none  &none  &none  &kp KP_N6              &kp KP_N7            &kp KP_N8         &kp KP_N9         &kp KP_N0         &mt LS(BACKSLASH) BACKSLASH
-&kp KP_NLCK              &kp LS(LEFT_BRACKET)  &kp LEFT_BRACKET  &kp LESS_THAN     &kp GREATER_THAN  &kp RIGHT_BRACKET  &none           &none         &kp LS(RIGHT_BRACKET)  &mt MINUS LS(EQUAL)  &trans            &trans            &kp EQUAL         &mt LS(MINUS) MINUS
-                                                                 &trans            &kp LEFT_ALT      &trans                                           &trans                 &trans               &trans
+&bhv_code_block 0 GRAVE  &kp LS(NUMBER_1)      &kp LS(NUMBER_2)  &kp LS(NUMBER_3)               &kp LS(NUMBER_4)  &kp LS(NUMBER_5)                   &none         &kp LS(NUMBER_6)       &kp LS(NUMBER_7)     &kp LS(NUMBER_8)  &kp LS(NUMBER_9)  &kp LS(NUMBER_0)  &kp BSPC
+&kp LS(GRAVE)            &kp KP_N1             &kp KP_N2         &kp KP_N3                      &kp KP_N4         &kp KP_N5                   &none  &none  &none  &kp KP_N6              &kp KP_N7            &kp KP_N8         &kp KP_N9         &kp KP_N0         &mt LS(BACKSLASH) BACKSLASH
+&kp KP_NLCK              &kp LS(LEFT_BRACKET)  &kp LEFT_BRACKET  &bhv_html_comment 0 LESS_THAN  &kp GREATER_THAN  &kp RIGHT_BRACKET  &none           &none         &kp LS(RIGHT_BRACKET)  &mt MINUS LS(EQUAL)  &trans            &trans            &kp EQUAL         &mt LS(MINUS) MINUS
+                                                                 &trans                         &kp LEFT_ALT      &trans                                           &trans                 &trans               &trans
             >;
         };
 
