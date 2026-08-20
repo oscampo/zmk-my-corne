@@ -81,7 +81,7 @@ layers:
   - KP NLCK
   - {t: 'Sft+[', s: 'Sft+{'}
   - {t: '[', s: '{'}
-  - <
+  - {t: <, h: '&html_comment'}
   - '>'
   - {t: ']', s: '}'}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
