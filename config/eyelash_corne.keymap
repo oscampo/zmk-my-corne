@@ -159,7 +159,7 @@
             #binding-cells = <0>;
             bindings =
                 <&macro_tap_time 1>,
-                <&kp LESS_THAN &kp EXCLAMATION &kp MINUS &kp MINUS &kp MINUS &kp MINUS &kp MINUS &kp MINUS &kp GT &kp SPACE &kp LEFT_ARROW &kp LEFT_ARROW &kp LEFT_ARROW &kp LEFT_ARROW &kp LEFT_ARROW>;
+                <&kp LESS_THAN &kp EXCLAMATION &kp MINUS &kp MINUS &kp SPACE &kp SPACE &kp MINUS &kp MINUS &kp GT &kp SPACE &kp LEFT_ARROW &kp LEFT_ARROW &kp LEFT_ARROW &kp LEFT_ARROW &kp LEFT_ARROW>;
 
             label = "HTML_COMMENT";
         };
