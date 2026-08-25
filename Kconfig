@@ -1,3 +1,5 @@
-config KBD_BLE_DISPLAY
-	bool "Custom keyboard display with BLE text service"
-	default n
+# CONFIG_KBD_BLE_DISPLAY (renamed CONFIG_ZMK_COMPANION_DISPLAY) used to be
+# defined here directly, backing custom_status_screen.c/mono_*.c in config/.
+# It's now owned by the oscampo/zmk-companion west module (added in
+# config/west.yml), which brings its own Kconfig - see that repo's
+# zephyr/module.yml and firmware/Kconfig.

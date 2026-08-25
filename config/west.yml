@@ -8,6 +8,8 @@ manifest:
       # - https://docs.zephyrproject.org/3.5.0/develop/west/manifest.html#projects
     - name: urob
       url-base: https://github.com/urob
+    - name: oscampo
+      url-base: https://github.com/oscampo
   projects:
     - name: eyelash_corne
       url: https://github.com/a741725193/zmk-new_corne
@@ -18,6 +20,12 @@ manifest:
       import: app/west.yml
     - name: zmk-unicode
       remote: urob
+      revision: main
+    # Display feature logic (custom_status_screen.c) lives here now, not in
+    # config/ - see zmk-companion's own zephyr/module.yml for how it wires in
+    # via CONFIG_ZMK_COMPANION_DISPLAY.
+    - name: zmk-companion
+      remote: oscampo
       revision: main
   self:
     path: config
