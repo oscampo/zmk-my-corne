@@ -24,8 +24,12 @@ manifest:
     # Display feature logic (custom_status_screen.c) lives here now, not in
     # config/ - see zmk-companion's own zephyr/module.yml for how it wires in
     # via CONFIG_ZMK_COMPANION_DISPLAY.
+    #
+    # TEMPORARY: pinned to claude/display-idle-fallback (PR #25), not main,
+    # to test the display-falls-back-to-nice_view-after-10min-idle fix on
+    # real hardware before merging. Revert to `revision: main` once confirmed.
     - name: zmk-companion
       remote: oscampo
-      revision: main
+      revision: claude/display-idle-fallback
   self:
     path: config
