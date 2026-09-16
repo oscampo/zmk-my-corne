@@ -99,7 +99,7 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   SYMBOL:
-  - {t: '$$mdi:transfer$$', type: trans}
+  - '&code_prhase'
   - PgUp
   - {t: HOME, h: Ctl+HOME}
   - $$mdi:arrow-up-bold$$
