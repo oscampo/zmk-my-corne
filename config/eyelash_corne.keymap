@@ -176,7 +176,9 @@
         code_prhase: code_prhase {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_tap_time 1>, <&kp GRAVE &kp GRAVE &kp LEFT>;
+            bindings =
+                <&macro_tap_time 1>,
+                <&kp GRAVE &kp GRAVE &kp SPACE &kp LEFT &kp LEFT_ARROW>;
 
             label = "CODE_PRHASE";
         };
