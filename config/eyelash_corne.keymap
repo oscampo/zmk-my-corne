@@ -99,6 +99,15 @@
             #binding-cells = <2>;
             tapping-term-ms = <150>;
         };
+
+        bhv_code_phrase: bhv_code_phrase {
+            compatible = "zmk,behavior-hold-tap";
+            label = "BHV_CODE_PHRASE";
+            bindings = <&code_block>, <&kp>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <150>;
+        };
     };
 
     rgb_encoder: rgb_encoder {
@@ -163,6 +172,14 @@
 
             label = "HTML_COMMENT";
         };
+
+        code_prhase: code_prhase {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap_time 1>, <&kp GRAVE &kp GRAVE &kp LEFT>;
+
+            label = "CODE_PRHASE";
+        };
     };
 
     combos {
@@ -212,10 +229,10 @@
         raise_layer {
             display-name = "SYMBOL";
             bindings = <
-&trans  &kp PAGE_UP    &mt LC(HOME) HOME  &kp UP_ARROW    &mt LC(END) END  &none                       &none         &kp F6               &kp F7                   &kp F8        &kp F9       &kp F10   &kp BSPC
-&trans  &kp PAGE_DOWN  &kp LEFT_ARROW     &kp DOWN_ARROW  &kp RIGHT_ARROW  &none                &none  &none  &none  &kp LS(RIGHT_ARROW)  &kp LS(LC(RIGHT_ARROW))  &kp LC(HOME)  &kp LC(END)  &kp BSLH  &kp GRAVE
-&trans  &kp LC(Z)      &kp LC(X)          &kp LC(C)       &kp LC(V)        &none      &trans           &none         &kp RA(N)            &kp PLUS                 &kp LBRC      &kp RBRC     &kp PIPE  &kp TILDE
-                                          &trans          &trans           &kp SPACE                                 &kp RET              &trans                   &trans
+&code_prhase  &kp PAGE_UP    &mt LC(HOME) HOME  &kp UP_ARROW    &mt LC(END) END  &none                       &none         &kp F6               &kp F7                   &kp F8        &kp F9       &kp F10   &kp BSPC
+&trans        &kp PAGE_DOWN  &kp LEFT_ARROW     &kp DOWN_ARROW  &kp RIGHT_ARROW  &none                &none  &none  &none  &kp LS(RIGHT_ARROW)  &kp LS(LC(RIGHT_ARROW))  &kp LC(HOME)  &kp LC(END)  &kp BSLH  &kp GRAVE
+&trans        &kp LC(Z)      &kp LC(X)          &kp LC(C)       &kp LC(V)        &none      &trans           &none         &kp RA(N)            &kp PLUS                 &kp LBRC      &kp RBRC     &kp PIPE  &kp TILDE
+                                                &trans          &trans           &kp SPACE                                 &kp RET              &trans                   &trans
             >;
         };
 
