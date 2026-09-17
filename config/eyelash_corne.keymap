@@ -190,6 +190,158 @@
 
             label = "CODE_PRHASE";
         };
+
+        // Macros de la capa BOX DRAW (layer_5). Reemplazan &uc 0x25XX para
+        // evitar que UC_MODE_WIN_ALT envie los digitos hex por la fila
+        // numerica (N0-N9, colisiona con alt+1..alt+0 de Sublime Text).
+        // Misma secuencia que UC_MODE_WIN_ALT (ver behavior_unicode.c de
+        // urob/zmk-unicode): sostener LALT, tap KP_PLUS, tap cada digito
+        // hex, soltar LALT -- pero con KP_N0-KP_N9 para los digitos
+        // numericos, igual que el numpad fisico manual que nunca tuvo el
+        // problema. La letra hex "C" (unica que aparece en este bloque)
+        // se deja igual, ya funcionaba sin conflicto.
+        box_250c: box_250c {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&macro_tap_time 5>,
+                <&macro_wait_time 0>,
+                <&macro_press &kp LALT>,
+                <&kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N0 &kp C>,
+                <&macro_release &kp LALT>;
+
+            label = "BOX_250C";
+        };
+
+        box_252c: box_252c {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&macro_tap_time 5>,
+                <&macro_wait_time 0>,
+                <&macro_press &kp LALT>,
+                <&kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N2 &kp C>,
+                <&macro_release &kp LALT>;
+
+            label = "BOX_252C";
+        };
+
+        box_2510: box_2510 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&macro_tap_time 5>,
+                <&macro_wait_time 0>,
+                <&macro_press &kp LALT>,
+                <&kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N1 &kp KP_N0>,
+                <&macro_release &kp LALT>;
+
+            label = "BOX_2510";
+        };
+
+        box_2500: box_2500 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&macro_tap_time 5>,
+                <&macro_wait_time 0>,
+                <&macro_press &kp LALT>,
+                <&kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N0 &kp KP_N0>,
+                <&macro_release &kp LALT>;
+
+            label = "BOX_2500";
+        };
+
+        box_251c: box_251c {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&macro_tap_time 5>,
+                <&macro_wait_time 0>,
+                <&macro_press &kp LALT>,
+                <&kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N1 &kp C>,
+                <&macro_release &kp LALT>;
+
+            label = "BOX_251C";
+        };
+
+        box_253c: box_253c {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&macro_tap_time 5>,
+                <&macro_wait_time 0>,
+                <&macro_press &kp LALT>,
+                <&kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N3 &kp C>,
+                <&macro_release &kp LALT>;
+
+            label = "BOX_253C";
+        };
+
+        box_2524: box_2524 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&macro_tap_time 5>,
+                <&macro_wait_time 0>,
+                <&macro_press &kp LALT>,
+                <&kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N2 &kp KP_N4>,
+                <&macro_release &kp LALT>;
+
+            label = "BOX_2524";
+        };
+
+        box_2502: box_2502 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&macro_tap_time 5>,
+                <&macro_wait_time 0>,
+                <&macro_press &kp LALT>,
+                <&kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N0 &kp KP_N2>,
+                <&macro_release &kp LALT>;
+
+            label = "BOX_2502";
+        };
+
+        box_2514: box_2514 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&macro_tap_time 5>,
+                <&macro_wait_time 0>,
+                <&macro_press &kp LALT>,
+                <&kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N1 &kp KP_N4>,
+                <&macro_release &kp LALT>;
+
+            label = "BOX_2514";
+        };
+
+        box_2534: box_2534 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&macro_tap_time 5>,
+                <&macro_wait_time 0>,
+                <&macro_press &kp LALT>,
+                <&kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N3 &kp KP_N4>,
+                <&macro_release &kp LALT>;
+
+            label = "BOX_2534";
+        };
+
+        box_2518: box_2518 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&macro_tap_time 5>,
+                <&macro_wait_time 0>,
+                <&macro_press &kp LALT>,
+                <&kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N1 &kp KP_N8>,
+                <&macro_release &kp LALT>;
+
+            label = "BOX_2518";
+        };
     };
 
     combos {
@@ -268,9 +420,9 @@
         layer_5 {
             display-name = "BOX DRAW";
             bindings = <
-&trans  &uc 0x250C 0  &uc 0x252C 0  &uc 0x2510 0  &uc 0x2500 0  &trans                    &trans          &trans  &kp LG(LS(LA(LC(N1))))  &kp LG(LS(LA(LC(N2))))  &kp LG(LS(LA(LC(N3))))  &trans  &trans
-&trans  &uc 0x251C 0  &uc 0x253C 0  &uc 0x2524 0  &uc 0x2502 0  &trans            &trans  &trans  &trans  &trans  &kp LG(LS(LA(LC(N4))))  &kp LG(LS(LA(LC(N5))))  &kp LG(LS(LA(LC(N6))))  &trans  &trans
-&trans  &uc 0x2514 0  &uc 0x2534 0  &uc 0x2518 0  &trans        &trans  &trans            &trans          &trans  &kp LG(LS(LA(LC(N7))))  &kp LG(LS(LA(LC(N8))))  &kp LG(LS(LA(LC(N9))))  &trans  &trans
+&trans  &box_250c  &box_252c  &box_2510  &box_2500  &trans                    &trans          &trans  &kp LG(LS(LA(LC(N1))))  &kp LG(LS(LA(LC(N2))))  &kp LG(LS(LA(LC(N3))))  &trans  &trans
+&trans  &box_251c  &box_253c  &box_2524  &box_2502  &trans            &trans  &trans  &trans  &trans  &kp LG(LS(LA(LC(N4))))  &kp LG(LS(LA(LC(N5))))  &kp LG(LS(LA(LC(N6))))  &trans  &trans
+&trans  &box_2514  &box_2534  &box_2518  &trans        &trans  &trans            &trans          &trans  &kp LG(LS(LA(LC(N7))))  &kp LG(LS(LA(LC(N8))))  &kp LG(LS(LA(LC(N9))))  &trans  &trans
                                     &trans        &trans        &trans                                    &trans  &trans                  &trans
             >;
         };
