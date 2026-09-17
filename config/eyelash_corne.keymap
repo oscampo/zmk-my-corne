@@ -200,6 +200,13 @@
         // numericos, igual que el numpad fisico manual que nunca tuvo el
         // problema. La letra hex "C" (unica que aparece en este bloque)
         // se deja igual, ya funcionaba sin conflicto.
+        //
+        // &macro_press deja el MACRO ENTERO en modo "solo presionar" hasta
+        // el siguiente cambio de modo (no solo la tecla que lo acompana,
+        // ver behavior_macro.c de zmkfirmware/zmk), por eso hace falta
+        // &macro_tap explicito antes de los digitos para volver a
+        // presionar-y-soltar normal; sin eso, KP_PLUS y los digitos
+        // quedan fisicamente presionados y nunca se sueltan.
         box_250c: box_250c {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
@@ -207,7 +214,7 @@
                 <&macro_tap_time 5>,
                 <&macro_wait_time 0>,
                 <&macro_press &kp LALT>,
-                <&kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N0 &kp C>,
+                <&macro_tap &kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N0 &kp C>,
                 <&macro_release &kp LALT>;
 
             label = "BOX_250C";
@@ -220,7 +227,7 @@
                 <&macro_tap_time 5>,
                 <&macro_wait_time 0>,
                 <&macro_press &kp LALT>,
-                <&kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N2 &kp C>,
+                <&macro_tap &kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N2 &kp C>,
                 <&macro_release &kp LALT>;
 
             label = "BOX_252C";
@@ -233,7 +240,7 @@
                 <&macro_tap_time 5>,
                 <&macro_wait_time 0>,
                 <&macro_press &kp LALT>,
-                <&kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N1 &kp KP_N0>,
+                <&macro_tap &kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N1 &kp KP_N0>,
                 <&macro_release &kp LALT>;
 
             label = "BOX_2510";
@@ -246,7 +253,7 @@
                 <&macro_tap_time 5>,
                 <&macro_wait_time 0>,
                 <&macro_press &kp LALT>,
-                <&kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N0 &kp KP_N0>,
+                <&macro_tap &kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N0 &kp KP_N0>,
                 <&macro_release &kp LALT>;
 
             label = "BOX_2500";
@@ -259,7 +266,7 @@
                 <&macro_tap_time 5>,
                 <&macro_wait_time 0>,
                 <&macro_press &kp LALT>,
-                <&kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N1 &kp C>,
+                <&macro_tap &kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N1 &kp C>,
                 <&macro_release &kp LALT>;
 
             label = "BOX_251C";
@@ -272,7 +279,7 @@
                 <&macro_tap_time 5>,
                 <&macro_wait_time 0>,
                 <&macro_press &kp LALT>,
-                <&kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N3 &kp C>,
+                <&macro_tap &kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N3 &kp C>,
                 <&macro_release &kp LALT>;
 
             label = "BOX_253C";
@@ -285,7 +292,7 @@
                 <&macro_tap_time 5>,
                 <&macro_wait_time 0>,
                 <&macro_press &kp LALT>,
-                <&kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N2 &kp KP_N4>,
+                <&macro_tap &kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N2 &kp KP_N4>,
                 <&macro_release &kp LALT>;
 
             label = "BOX_2524";
@@ -298,7 +305,7 @@
                 <&macro_tap_time 5>,
                 <&macro_wait_time 0>,
                 <&macro_press &kp LALT>,
-                <&kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N0 &kp KP_N2>,
+                <&macro_tap &kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N0 &kp KP_N2>,
                 <&macro_release &kp LALT>;
 
             label = "BOX_2502";
@@ -311,7 +318,7 @@
                 <&macro_tap_time 5>,
                 <&macro_wait_time 0>,
                 <&macro_press &kp LALT>,
-                <&kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N1 &kp KP_N4>,
+                <&macro_tap &kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N1 &kp KP_N4>,
                 <&macro_release &kp LALT>;
 
             label = "BOX_2514";
@@ -324,7 +331,7 @@
                 <&macro_tap_time 5>,
                 <&macro_wait_time 0>,
                 <&macro_press &kp LALT>,
-                <&kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N3 &kp KP_N4>,
+                <&macro_tap &kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N3 &kp KP_N4>,
                 <&macro_release &kp LALT>;
 
             label = "BOX_2534";
@@ -337,7 +344,7 @@
                 <&macro_tap_time 5>,
                 <&macro_wait_time 0>,
                 <&macro_press &kp LALT>,
-                <&kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N1 &kp KP_N8>,
+                <&macro_tap &kp KP_PLUS &kp KP_N2 &kp KP_N5 &kp KP_N1 &kp KP_N8>,
                 <&macro_release &kp LALT>;
 
             label = "BOX_2518";
