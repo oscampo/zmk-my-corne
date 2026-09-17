@@ -23,6 +23,14 @@
     require-prior-idle-ms = <150>;
 };
 
+// Windows HexNumpad input system (EnableHexNumpad registry trick, ver
+// segundo-cerebro #871). Requerido: default-mode no tiene valor por
+// defecto en el behavior &uc, sin esto el módulo cae al primer valor del
+// enum, no necesariamente Windows.
+&uc {
+    default-mode = <UC_MODE_WIN_ALT>;
+};
+
 / {
     behaviors {
         mt_shift: mt_shift {
